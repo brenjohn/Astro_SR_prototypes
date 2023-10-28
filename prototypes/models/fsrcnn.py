@@ -39,7 +39,7 @@ class FSRCNN(torch.nn.Module):
         self.shrinking_prelu = nn.PReLU(num_parameters=s)
         
         # Mapping layers.
-        self.mappings = [
+        self.mappings = nn.ModuleList([
             nn.Conv3d(in_channels  = s,
                       out_channels = s,
                       kernel_size  = 3,
@@ -47,7 +47,7 @@ class FSRCNN(torch.nn.Module):
                       padding      = 1,
                       dtype=torch.float32)
             for mi in range(m)
-            ]
+            ])
         self.mapping_prelus = [nn.PReLU(num_parameters=s) for mi in range(m)]
         
         # Expanding layer.

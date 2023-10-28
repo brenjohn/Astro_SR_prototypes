@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Sep 26 10:47:51 2023
+Created on Sat Oct 28 13:34:09 2023
 
 @author: john
 """
@@ -17,19 +17,19 @@ import matplotlib.pyplot as plt
 
 #%% Load the dataset
 data_dir   = 'data/'
-data_path  = 'fsrcnn_train_dataset.pth'
+data_path  = 'eeds_train_dataset.pth'
 data_train = torch.load(data_dir + data_path)
 Xs, Ys     = data_train['Xs'], data_train['Ys']
 
-data_path  = 'fsrcnn_validation_dataset.pth'
+data_path  = 'eeds_validation_dataset.pth'
 data_valid = torch.load(data_dir + data_path)
 Xs, Ys     = data_valid['Xs'], data_valid['Ys']
 
 
 #%% Load the model loss history
-model_name         = 'fsrcnn_32-7-3'
+model_name         = 'eeds_D3-16-3_64-4-64-16_S3-16-5_4-8'
 checkpoints_dir    = 'checkpoints/' + model_name + '/'
-checkpoint_num     = 321
+checkpoint_num     = 699
 checkpoint_name    = model_name + f'_{checkpoint_num}.pth'
 checkpoint         = torch.load(checkpoints_dir + checkpoint_name)
 loss_train_history = checkpoint['train_history']

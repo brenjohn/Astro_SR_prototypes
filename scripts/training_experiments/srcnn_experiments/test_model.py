@@ -32,9 +32,9 @@ test_data = SRDataset(Xs, Ys)
 
 
 #%% Load the model
-model_name         = 'srcnn_9-1-5_64-32'
+model_name         = 'srcnn_5-3-3-3_64-32-32'
 checkpoints_dir    = 'checkpoints/' + model_name + '/'
-checkpoint_num     = 6
+checkpoint_num     = 699
 checkpoint_name    = model_name + f'_{checkpoint_num}.pth'
 checkpoint         = torch.load(checkpoints_dir + checkpoint_name)
 model              = checkpoint['model']
@@ -51,12 +51,12 @@ for X, Y in test_loader:
     ti = time()
     X_norm = (X - mu) / sigma
     X_bicu = rescale(X_norm, scale)
-    X_pred = model(X_bicu[0])
+    X_pred = model(X_bicu[0].unsqueeze(0))
     X_rstd = sigma * X_pred + mu
     tf = time()
     
     times.append(tf - ti)
-    loss = criterion(X_rstd, Y)
+    loss = criterion(X_rstd.squeeze(0), Y)
     losses.append(loss.item())
     
     

@@ -13,12 +13,13 @@ sys.path.append("../../..")
 
 import torch
 import torch.optim as optim
+torch.set_flush_denormal(True)
 
 from prototypes.models.fsrcnn import FSRCNN
 
 
 #%% Define the model
-d, s, m = 32, 5, 1
+d, s, m = 32, 7, 3
 model = FSRCNN(d, s, m)
 
 

@@ -15,34 +15,44 @@ import torch
 import torch.optim as optim
 torch.set_flush_denormal(True)
 
-from prototypes.models.srcnn import SRCNN
+from prototypes.models.eeds import EEDS, EED, EES
 
 
 #%% Define the model
-ks = [9, 1, 5]
-ns = [64, 32]
-model = SRCNN(1, ks, ns)
+scale = 4
+
+fe_n, fe_k  = 64, 3
+us_n, us_k  = 4,  16
+re_n, re_k  = 64, 3
+ms_n, ms_ks = 16, [1, 3, 5, 7]
+
+deep_name = 'D'
+deep_name += '-'.join(map(str, [fe_k, us_k, re_k])) + '_'
+deep_name += '-'.join(map(str, [fe_n, us_n, re_n, ms_n]))
+deep_model = EED(fe_n, fe_k, us_n, us_k, re_n, re_k, ms_n, ms_ks, scale)
+
+fe_n, fe_k = 4, 3
+us_n, us_k = 8, 16
+re_k       =    5
+
+shallow_name = 'S'
+shallow_name += '-'.join(map(str, [fe_k, us_k, re_k])) + '_'
+shallow_name += '-'.join(map(str, [fe_n, us_n]))
+shallow_model = EES(fe_n, fe_k, us_n, us_k, re_k, scale)
+
+model = EEDS(deep_model, shallow_model)
 
 
 #%% Define the optimizer
 lr = 0.001
-lr_weights = [1, 1, 0.1]
 
-learning_rates = [
-    {'params': layer.parameters(), 'lr': w * lr}
-    for (layer, w) in zip(model.conv_layers, lr_weights)
-]
-
-learning_rates += [
-    {'params': act.parameters(), 'lr': w * lr}
-    for (act, w) in zip(model.activations, lr_weights)
-]
+learning_rates = model.learning_rates(lr)
 
 optimizer = optim.Adam(learning_rates, lr=lr)
 
 
 #%% Save the model and optimizer
-model_name = 'srcnn_' + '-'.join(map(str, ks)) + '_' + '-'.join(map(str, ns))
+model_name = 'eeds_' + deep_name + '_' + shallow_name
 
 checkpoints_dir = 'checkpoints/'
 if not os.path.exists(checkpoints_dir):

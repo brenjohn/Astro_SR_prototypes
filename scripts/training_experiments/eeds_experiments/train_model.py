@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Sep 24 18:49:10 2023
+Created on Wed Sep 20 15:20:38 2023
 
 @author: john
 """
@@ -12,7 +12,6 @@ sys.path.append("../../..")
 import os
 import torch
 import torch.nn as nn
-import torch.optim.lr_scheduler as lr_scheduler
 torch.set_flush_denormal(True)
 
 from tqdm import tqdm
@@ -22,19 +21,19 @@ from prototypes.srdataset import SRDataset
 
 #%% Load the datasets
 data_dir     = 'data/'
-data_path    = data_dir + 'fsrcnn_train_dataset.pth'
+data_path    = data_dir + 'eeds_train_dataset.pth'
 data         = torch.load(data_path)
 Xs, Ys       = data['Xs'], data['Ys']
 train_data   = SRDataset(Xs, Ys)
 
-data_path    = data_dir + 'fsrcnn_validation_dataset.pth'
+data_path    = data_dir + 'eeds_validation_dataset.pth'
 data         = torch.load(data_path)
 Xs, Ys       = data['Xs'], data['Ys']
 valid_data   = SRDataset(Xs, Ys)
 
 
 #%% Load the model
-model_name         = 'fsrcnn_32-7-3'
+model_name         = 'eeds_D3-16-3_64-4-64-16_S3-16-5_4-8'
 checkpoints_dir    = 'checkpoints/' + model_name + '/'
 checkpoint_num     = 0
 checkpoint_name    = model_name + '_{0}.pth'
@@ -47,7 +46,7 @@ loss_valid_history = checkpoint['valid_history']
 
 
 #%% Training parameters
-num_epochs = 700
+num_epochs = 7
 criterion = nn.MSELoss()
 
 train_loader = DataLoader(train_data, batch_size=16, shuffle=True)
@@ -56,7 +55,6 @@ valid_loader = DataLoader(valid_data, batch_size=1, shuffle=True)
 
 #%% Training loop
 epochs = len(loss_train_history)
-scheduler = lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.5)
 for epoch in range(1 + epochs, num_epochs + epochs):
     
     #=============================== Train Model =============================#
@@ -75,7 +73,6 @@ for epoch in range(1 + epochs, num_epochs + epochs):
         running_loss += loss.item()
         progress_bar.set_postfix({'loss': loss.item()}, refresh=True)
         
-    scheduler.step()
     # Calculate average loss for this epoch
     train_loss = running_loss / len(train_loader)
     loss_train_history.append(train_loss)

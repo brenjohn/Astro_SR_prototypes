@@ -52,7 +52,7 @@ plt.yscale('log')
 for i, name in enumerate(names):
     plt.annotate(name, (times[i], losses[i]), 
                  textcoords = "offset points",
-                 fontsize   = 7,
+                 fontsize   = 4,
                  xytext     = (2,7), 
                  ha         = 'left')
 

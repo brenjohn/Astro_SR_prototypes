@@ -35,8 +35,8 @@ class SRCNN(torch.nn.Module):
         self.ks = ks
         self.ns = ns
         
-        self.conv_layers = []
-        self.activations = []
+        self.conv_layers = nn.ModuleList()
+        self.activations = nn.ModuleList()
         
         # Create the convolutional layers and activation functions.
         in_channels = channels

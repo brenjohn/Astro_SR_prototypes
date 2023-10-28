@@ -12,6 +12,7 @@ sys.path.append("../../..")
 import os
 import torch
 import torch.nn as nn
+torch.set_flush_denormal(True)
 
 from tqdm import tqdm
 from torch.utils.data import DataLoader
