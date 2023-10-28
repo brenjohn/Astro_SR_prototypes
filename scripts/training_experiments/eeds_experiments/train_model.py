@@ -33,7 +33,7 @@ valid_data   = SRDataset(Xs, Ys)
 
 
 #%% Load the model
-model_name         = 'eeds_D3-16-3_64-4-64-16_S3-16-5_4-8'
+model_name         = 'eeds_D3-16-3_64-4-16-4_S3-16-5_4-8'
 checkpoints_dir    = 'checkpoints/' + model_name + '/'
 checkpoint_num     = 0
 checkpoint_name    = model_name + '_{0}.pth'
@@ -46,10 +46,10 @@ loss_valid_history = checkpoint['valid_history']
 
 
 #%% Training parameters
-num_epochs = 7
+num_epochs = 700
 criterion = nn.MSELoss()
 
-train_loader = DataLoader(train_data, batch_size=16, shuffle=True)
+train_loader = DataLoader(train_data, batch_size=8, shuffle=True)
 valid_loader = DataLoader(valid_data, batch_size=1, shuffle=True)
 
 

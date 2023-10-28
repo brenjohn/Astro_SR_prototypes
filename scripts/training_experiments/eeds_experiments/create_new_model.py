@@ -23,8 +23,8 @@ scale = 4
 
 fe_n, fe_k  = 64, 3
 us_n, us_k  = 4,  16
-re_n, re_k  = 64, 3
-ms_n, ms_ks = 16, [1, 3, 5, 7]
+re_n, re_k  = 16, 3
+ms_n, ms_ks = 4, [1, 3, 5, 7]
 
 deep_name = 'D'
 deep_name += '-'.join(map(str, [fe_k, us_k, re_k])) + '_'

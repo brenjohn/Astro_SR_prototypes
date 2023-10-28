@@ -92,12 +92,12 @@ class EED(torch.nn.Module):
         self.upsampling_prelu = nn.PReLU(num_parameters = us_channels)
         self.us_channel_expansion = nn.Conv3d(
             in_channels  = us_channels,
-            out_channels = fe_channels,
+            out_channels = re_channels,
             kernel_size  = 1,
             stride       = 1,
             padding      = 0,
             dtype        = torch.float32)
-        self.us_channel_expansion_prelu = nn.PReLU(num_parameters=fe_channels)
+        self.us_channel_expansion_prelu = nn.PReLU(num_parameters=re_channels)
         
         # Reconstruction.
         self.re_residual_block1 = ResBlock(re_channels, re_kernel)
@@ -112,7 +112,7 @@ class EED(torch.nn.Module):
         self.re_channel_shrinking_prelu = nn.PReLU(num_parameters=ms_channels)
         self.multi_scale_conv = MultiScaleConv(ms_channels, ms_kernels)
         self.re_output = nn.Conv3d(
-            in_channels  = re_channels, 
+            in_channels  = ms_channels * len(ms_kernels), 
             out_channels = 1,
             kernel_size  = 1,
             stride       = 1,
